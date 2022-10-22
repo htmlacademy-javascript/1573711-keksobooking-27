@@ -1,4 +1,4 @@
-import {getRandomNumber, getRandomArbitrary} from'./util.js';
+import {getRandomNumber, getRandomArbitrary, makeCounter} from'./util.js';
 
 const AD_TITLE = [
   'Есть свободные места',
@@ -53,16 +53,6 @@ const MAX_LAT = 35.70000;
 
 const MIN_LNG = 139.70000;
 const MAX_LNG = 139.80000;
-
-const makeCounter = () => {
-  let count = 0;
-
-  return () => {
-    count++;
-
-    return count;
-  };
-};
 
 const counter = makeCounter();
 

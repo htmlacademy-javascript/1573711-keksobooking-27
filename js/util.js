@@ -23,4 +23,14 @@ function getRandomArbitrary(min, max, decimal) {
   return number;
 }
 
-export {getRandomNumber, getRandomArbitrary};
+const makeCounter = () => {
+  let count = 0;
+
+  return () => {
+    count++;
+
+    return count;
+  };
+};
+
+export {getRandomNumber, getRandomArbitrary, makeCounter};
