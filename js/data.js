@@ -63,7 +63,7 @@ const createDeclarations = () => {
   return {
     author:
     {
-      avatar: `img/avatars/user${counter().toString().padStart(2, '0')}.png`
+      avatar: `img/avatars/user${getRandomNumber(1, 10).toString().padStart(2, '0')}.png`
     },
     offer:
     {
@@ -91,4 +91,4 @@ const createArrow = () => Array.from({ length: 1 }, createDeclarations);
 
 createArrow();
 
-export {createArrow, AD_FEATURES};
+export {createArrow, AD_FEATURES, AD_PHOTOS};
