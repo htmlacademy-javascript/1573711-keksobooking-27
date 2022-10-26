@@ -61,7 +61,7 @@ const createDeclarations = () => {
   const RANDOM_LNG = getRandomArbitrary(MIN_LNG, MAX_LNG, 4);
 
   return {
-    autor:
+    author:
     {
       avatar: `img/avatars/user${counter().toString().padStart(2, '0')}.png`
     },
@@ -87,6 +87,8 @@ const createDeclarations = () => {
   };
 };
 
-const createArrow = () => Array.from({ length: 10 }, createDeclarations);
+const createArrow = () => Array.from({ length: 1 }, createDeclarations);
 
 createArrow();
+
+export {createArrow, AD_FEATURES};
