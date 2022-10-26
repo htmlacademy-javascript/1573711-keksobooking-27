@@ -1,4 +1,4 @@
-import {getRandomNumber, getRandomArbitrary, makeCounter} from'./util.js';
+import {getRandomNumber, getRandomArbitrary} from'./util.js';
 
 const AD_TITLE = [
   'Есть свободные места',
@@ -54,16 +54,14 @@ const MAX_LAT = 35.70000;
 const MIN_LNG = 139.70000;
 const MAX_LNG = 139.80000;
 
-const counter = makeCounter();
-
 const createDeclarations = () => {
   const RANDOM_LAT = getRandomArbitrary(MIN_LAT, MAX_LAT, 4);
   const RANDOM_LNG = getRandomArbitrary(MIN_LNG, MAX_LNG, 4);
 
   return {
-    autor:
+    author:
     {
-      avatar: `img/avatars/user${counter().toString().padStart(2, '0')}.png`
+      avatar: `img/avatars/user${getRandomNumber(1, 10).toString().padStart(2, '0')}.png`
     },
     offer:
     {
@@ -87,6 +85,8 @@ const createDeclarations = () => {
   };
 };
 
-const createArrow = () => Array.from({ length: 10 }, createDeclarations);
+const createArrow = () => Array.from({ length: 1 }, createDeclarations);
 
 createArrow();
+
+export {createArrow, AD_FEATURES, AD_PHOTOS};
