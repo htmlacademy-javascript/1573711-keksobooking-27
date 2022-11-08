@@ -37,8 +37,6 @@ const changeRequiredItems = () => {
 
   offerCapacity.textContent = `${notice.offer.rooms} комнаты для ${notice.offer.guests} гостей`;
   offerTime.textContent = `Заезд после ${notice.offer.checkin}, выезд до ${notice.offer.checkout}`;
-
-  // Всегда один и тот же ID
   offerAvatar.src = notice.author.avatar;
 };
 
@@ -71,7 +69,5 @@ const checkPhotos = () => {
   });
 };
 
-changeRequiredItems();
-changeFeatures();
-checkDescription();
-checkPhotos();
+export {changeRequiredItems, changeFeatures, checkDescription, checkPhotos};
+
