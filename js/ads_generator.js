@@ -67,6 +67,9 @@ const checkPhotos = () => {
   });
 };
 
+// Пытаюсь совместить все функции в одну
+// Чтобы передавать ее для создания попапа
+
 const createPopup = () => {
   const popupClone = popup.cloneNode(true);
 

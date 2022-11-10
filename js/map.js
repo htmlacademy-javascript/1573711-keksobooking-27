@@ -73,4 +73,7 @@ adsArrow.forEach((offer) => {
   adMarker
     .addTo(map);
 // .bindPopup(createPopup(offer));
+
+// Функция выше не работает
+// В попап вообще ничего не отрисовывается
 });
