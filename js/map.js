@@ -1,6 +1,7 @@
 import {makeActive} from './form.js';
 import {createArrow} from './data.js';
-// import {changeRequiredItems, changeFeatures, checkDescription, checkPhotos} from './ads_generator.js';
+// import {createPopup} from './ads_generator.js';
+
 
 const address = document.querySelector('#address');
 address.setAttribute('disabled', true);
@@ -57,9 +58,9 @@ marker.on('moveend', (evt) => {
 
 const adsArrow = createArrow();
 
-adsArrow.forEach(({location}) => {
-  const lat = location.lat;
-  const lng = location.lng;
+adsArrow.forEach((offer) => {
+  const lat = offer.location.lat;
+  const lng = offer.location.lng;
 
   const adMarker = L.marker({
     lat,
@@ -71,4 +72,5 @@ adsArrow.forEach(({location}) => {
 
   adMarker
     .addTo(map);
+// .bindPopup(createPopup(offer));
 });

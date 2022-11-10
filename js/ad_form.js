@@ -58,21 +58,23 @@ pristine.addValidator(
   validateCapacity,
   'Вы вряд ли сюда влезете');
 
-// module8-task2 beginning
-
 // Validate Type and Price
 
 const adFormType = adForm.querySelector('#type');
 const typeOption = {
-  'bungalow': 0,
-  'flat': 1000,
-  'hotel': 3000,
-  'house': 5000,
-  'palace': 10000,
+  'bungalow': '0',
+  'flat': '1000',
+  'hotel': '3000',
+  'house': '5000',
+  'palace': '10000',
 };
 
-function validateType () {
+function onTypeChange () {
   adFormPrice.placeholder = typeOption[adFormType.value];
+}
+adFormType.addEventListener('change', onTypeChange);
+
+function validateType () {
   return adFormPrice.value >= typeOption[adFormType.value];
 }
 
@@ -121,8 +123,6 @@ pristine.addValidator(
   adFormTimeOut,
   validateTimeOut
 );
-
-// module8-task2 ending
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();

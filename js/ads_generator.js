@@ -1,6 +1,6 @@
 import {createArrow, AD_FEATURES, AD_PHOTOS} from './data.js';
 
-const notice = createArrow().shift();
+const notice = createArrow();
 
 const TYPE_DICTIONARY = {
   flat: 'Квартира',
@@ -12,10 +12,6 @@ const TYPE_DICTIONARY = {
 
 const card = document.querySelector('#card').content;
 const popup = card.querySelector('.popup');
-const mapCanvas = document.querySelector('#map-canvas');
-
-const popupClone = popup.cloneNode(true);
-mapCanvas.append(popupClone);
 
 const offerTitle = document.querySelector('.popup__title');
 const offerAdress = document.querySelector('.popup__text--address');
@@ -37,6 +33,8 @@ const changeRequiredItems = () => {
 
   offerCapacity.textContent = `${notice.offer.rooms} комнаты для ${notice.offer.guests} гостей`;
   offerTime.textContent = `Заезд после ${notice.offer.checkin}, выезд до ${notice.offer.checkout}`;
+
+  // Всегда один и тот же ID
   offerAvatar.src = notice.author.avatar;
 };
 
@@ -69,5 +67,15 @@ const checkPhotos = () => {
   });
 };
 
-export {changeRequiredItems, changeFeatures, checkDescription, checkPhotos};
+const createPopup = () => {
+  const popupClone = popup.cloneNode(true);
 
+  changeRequiredItems();
+  changeFeatures();
+  checkDescription();
+  checkPhotos();
+
+  return popupClone;
+};
+
+export {createPopup};

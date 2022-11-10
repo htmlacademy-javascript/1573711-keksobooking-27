@@ -85,7 +85,7 @@ const createDeclarations = () => {
   };
 };
 
-const createArrow = () => Array.from({ length: 4 }, createDeclarations);
+const createArrow = () => Array.from({ length: 10 }, createDeclarations);
 
 createArrow();
 
