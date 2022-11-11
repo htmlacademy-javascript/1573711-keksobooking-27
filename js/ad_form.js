@@ -72,6 +72,7 @@ const typeOption = {
 function onTypeChange () {
   adFormPrice.placeholder = typeOption[adFormType.value];
 }
+
 adFormType.addEventListener('change', onTypeChange);
 
 function validateType () {
@@ -87,6 +88,33 @@ pristine.addValidator(
   validateType,
   validateTypeDescription
 );
+
+// No UI Price slider
+
+const sliderElement = document.querySelector('.ad-form__slider');
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 100000,
+  },
+  start: 1000,
+  step: 10,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  adFormPrice.value = sliderElement.noUiSlider.get();
+  pristine.validate(adFormPrice);
+});
 
 // Validate checkin and checkout
 
