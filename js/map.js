@@ -1,6 +1,6 @@
 import {makeActive} from './form.js';
 import {createArrow} from './data.js';
-// import {createPopup} from './ads_generator.js';
+import {changeRequiredItems, changeFeatures, checkDescription, checkPhotos} from './ads_generator.js';
 
 
 const address = document.querySelector('#address');
@@ -58,6 +58,22 @@ marker.on('moveend', (evt) => {
 
 const adsArrow = createArrow();
 
+// Перенесла функцию из ads_generator сюда
+// Пытаюсь перенести все функцию в одну для отрисовки попапа
+
+const createPopup = () => {
+  const card = document.querySelector('#card').content;
+  const popup = card.querySelector('.popup');
+  const popupClone = popup.cloneNode(true);
+
+  changeRequiredItems(adsArrow);
+  changeFeatures();
+  checkDescription();
+  checkPhotos();
+
+  return popupClone;
+};
+
 adsArrow.forEach((offer) => {
   const lat = offer.location.lat;
   const lng = offer.location.lng;
@@ -71,8 +87,8 @@ adsArrow.forEach((offer) => {
   });
 
   adMarker
-    .addTo(map);
-  // .bindPopup(createPopup(offer));
+    .addTo(map)
+    .bindPopup(createPopup());
 
 // Функция выше не работает
 // В попап вообще ничего не отрисовывается

@@ -1,6 +1,6 @@
-import {createArrow, AD_FEATURES, AD_PHOTOS} from './data.js';
+import {AD_FEATURES, AD_PHOTOS} from './data.js';
 
-const notice = createArrow();
+// const notice = createArrow();
 
 const TYPE_DICTIONARY = {
   flat: 'Квартира',
@@ -9,9 +9,6 @@ const TYPE_DICTIONARY = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
-
-const card = document.querySelector('#card').content;
-const popup = card.querySelector('.popup');
 
 const offerTitle = document.querySelector('.popup__title');
 const offerAdress = document.querySelector('.popup__text--address');
@@ -25,7 +22,7 @@ const offerPhotos = document.querySelector('.popup__photos');
 const offerPhoto = document.querySelector('.popup__photo');
 const offerAvatar = document.querySelector('.popup__avatar');
 
-const changeRequiredItems = () => {
+const changeRequiredItems = (notice) => {
   offerTitle.textContent = notice.offer.title;
   offerAdress.textContent = notice.offer.adress;
   offerPrice.textContent = `${notice.offer.price} ₽/ночь`;
@@ -67,18 +64,4 @@ const checkPhotos = () => {
   });
 };
 
-// Пытаюсь совместить все функции в одну
-// Чтобы передавать ее для создания попапа
-
-const createPopup = () => {
-  const popupClone = popup.cloneNode(true);
-
-  changeRequiredItems();
-  changeFeatures();
-  checkDescription();
-  checkPhotos();
-
-  return popupClone;
-};
-
-export {createPopup};
+export {changeRequiredItems, changeFeatures, checkDescription, checkPhotos};
