@@ -8,6 +8,8 @@ const pristine = new Pristine(adForm, {
   errorTextClass: 'text-help',
 });
 
+// Validate title
+
 const adFormTitle = adForm.querySelector('#title');
 
 function validateTitle (value) {
@@ -31,6 +33,8 @@ pristine.addValidator(
   validatePrice,
   'Цена не должна превышать 100000!');
 
+// Validate room and capacity
+
 const adFormRooms = adForm.querySelector('#room_number');
 const adFormCapacity = adForm.querySelector('#capacity');
 const roomsOption = {
@@ -53,6 +57,72 @@ pristine.addValidator(
   adFormCapacity,
   validateCapacity,
   'Вы вряд ли сюда влезете');
+
+// Validate Type and Price
+
+const adFormType = adForm.querySelector('#type');
+const typeOption = {
+  'bungalow': '0',
+  'flat': '1000',
+  'hotel': '3000',
+  'house': '5000',
+  'palace': '10000',
+};
+
+function onTypeChange () {
+  adFormPrice.placeholder = typeOption[adFormType.value];
+}
+adFormType.addEventListener('change', onTypeChange);
+
+function validateType () {
+  return adFormPrice.value >= typeOption[adFormType.value];
+}
+
+function validateTypeDescription () {
+  return `Сумма должна быть выше ${typeOption[adFormType.value]}`;
+}
+
+pristine.addValidator(
+  adFormPrice,
+  validateType,
+  validateTypeDescription
+);
+
+// Validate checkin and checkout
+
+const adFormTimeIn = adForm.querySelector('#timein');
+const adFormTimeOut = adForm.querySelector('#timeout');
+
+const onTimeChange = (time, timeChange) => {
+  time.value = timeChange.value;
+};
+
+function validateTimeIn () {
+  adFormTimeOut.addEventListener(
+    'change',
+    onTimeChange(adFormTimeOut, adFormTimeIn));
+
+  return adFormTimeOut.value === adFormTimeIn.value;
+}
+
+function validateTimeOut () {
+  adFormTimeIn.addEventListener(
+    'change',
+    onTimeChange(adFormTimeIn, adFormTimeOut
+    ));
+
+  return adFormTimeIn.value === adFormTimeOut.value;
+}
+
+pristine.addValidator(
+  adFormTimeIn,
+  validateTimeIn
+);
+
+pristine.addValidator(
+  adFormTimeOut,
+  validateTimeOut
+);
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
