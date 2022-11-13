@@ -1,4 +1,4 @@
-import {getRandomNumber, getRandomArbitrary} from'./util.js';
+import {getRandomNumber, getRandomArbitrary, getRandomArray} from'./util.js';
 
 const AD_TITLE = [
   'Есть свободные места',
@@ -73,9 +73,9 @@ const createDeclarations = () => {
       guests: getRandomNumber(1, 10),
       checkin: AD_CHECK_IN[getRandomNumber(0, AD_CHECK_IN.length - 1)],
       checkout: AD_CHECK_OUT[getRandomNumber(0, AD_CHECK_OUT.length - 1)],
-      features: AD_FEATURES[getRandomNumber(0, AD_FEATURES.length - 1)],
+      features: getRandomArray(AD_FEATURES),
       description: AD_DESCRIPTION[getRandomNumber(0, AD_DESCRIPTION.length - 1)],
-      photos: AD_PHOTOS[getRandomNumber(0, AD_PHOTOS.length - 1)]
+      photos: getRandomArray(AD_PHOTOS),
     },
     location:
     {
@@ -85,8 +85,6 @@ const createDeclarations = () => {
   };
 };
 
-const createArrow = () => Array.from({ length: 10 }, createDeclarations);
+const createArray = () => Array.from({ length: 10 }, createDeclarations);
 
-createArrow();
-
-export {createArrow, AD_FEATURES, AD_PHOTOS};
+export {createArray, AD_FEATURES, AD_PHOTOS};

@@ -1,21 +1,22 @@
 import {makeActive} from './form.js';
-import {createArrow} from './data.js';
-import {changeRequiredItems, changeFeatures, checkDescription, checkPhotos} from './ads_generator.js';
+import {createArray} from './data.js';
+import {createCard} from './ads_generator.js';
 
+const CENTER_COORDINATES = {
+  lat: 35.68950,
+  lng: 139.69171,
+};
 
 const address = document.querySelector('#address');
 address.setAttribute('disabled', true);
-address.value = '35.68950, 139.69171';
 
 const map = L.map('map-canvas')
   .on('load', () => {
     makeActive();
   })
-  .setView({
-    lat: 35.68950,
-    lng: 139.69171,
-  }, 10);
+  .setView(CENTER_COORDINATES, 12);
 
+// добавляю слой с картой
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -23,31 +24,33 @@ L.tileLayer(
   },
 ).addTo(map);
 
+// большая иконка
 const icon = L.icon({
   iconUrl: '../img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
 
+// маленькая иконка
 const similarIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
+// добавляю основной большой маркер в центр Токио
 const marker = L.marker(
-  {
-    lat: 35.68950,
-    lng: 139.69171,
-  },
+  CENTER_COORDINATES,
   {
     draggable: true,
     icon: icon,
   },
+  address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`
 );
 
 marker.addTo(map);
 
+// делаю маркер подвижным и записываю координаты в поле адреса формы
 marker.on('moveend', (evt) => {
   const latLng = evt.target.getLatLng();
   const lat = latLng.lat.toFixed(5);
@@ -56,40 +59,25 @@ marker.on('moveend', (evt) => {
   address.value = `${lat}, ${lng}`;
 });
 
-const adsArrow = createArrow();
+const adsArray = createArray();
 
-// Перенесла функцию из ads_generator сюда
-// Пытаюсь перенести все функцию в одну для отрисовки попапа
+// создаю маленькие маркеры с попапами объявлений
+const createMarker = (offer) => {
+  const markerSmall = L.marker(
+    {
+      lat: offer.location.lat,
+      lng: offer.location.lng,
+    },
+    {
+      similarIcon,
+    }
+  );
 
-const createPopup = () => {
-  const card = document.querySelector('#card').content;
-  const popup = card.querySelector('.popup');
-  const popupClone = popup.cloneNode(true);
-
-  changeRequiredItems(adsArrow);
-  changeFeatures();
-  checkDescription();
-  checkPhotos();
-
-  return popupClone;
+  markerSmall
+    .addTo(map)
+    .bindPopup(createCard(offer));
 };
 
-adsArrow.forEach((offer) => {
-  const lat = offer.location.lat;
-  const lng = offer.location.lng;
-
-  const adMarker = L.marker({
-    lat,
-    lng,
-  },
-  {
-    icon: similarIcon,
-  });
-
-  adMarker
-    .addTo(map)
-    .bindPopup(createPopup());
-
-// Функция выше не работает
-// В попап вообще ничего не отрисовывается
+adsArray.forEach((offer) => {
+  createMarker(offer);
 });

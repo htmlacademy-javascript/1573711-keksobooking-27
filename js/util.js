@@ -23,6 +23,22 @@ function getRandomArbitrary(min, max, decimal) {
   return number;
 }
 
+const getRandomArray = (features) => {
+  const maxLengthArray = features.length;
+  const lengthOfArray = getRandomNumber(1, maxLengthArray);
+  const randomArray = [];
+
+  while (randomArray.length < lengthOfArray) {
+    const indexOfElement = getRandomNumber(0, maxLengthArray - 1);
+    const element = features[indexOfElement];
+
+    if (!randomArray.includes(element)) {
+      randomArray.push(element);
+    }
+  }
+  return randomArray;
+};
+
 const makeCounter = () => {
   let count = 0;
 
@@ -33,4 +49,4 @@ const makeCounter = () => {
   };
 };
 
-export {getRandomNumber, getRandomArbitrary, makeCounter};
+export {getRandomNumber, getRandomArbitrary, makeCounter, getRandomArray};

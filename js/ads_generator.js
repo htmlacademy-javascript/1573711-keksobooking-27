@@ -1,7 +1,3 @@
-import {AD_FEATURES, AD_PHOTOS} from './data.js';
-
-// const notice = createArrow();
-
 const TYPE_DICTIONARY = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -10,34 +6,26 @@ const TYPE_DICTIONARY = {
   hotel: 'Отель',
 };
 
-const offerTitle = document.querySelector('.popup__title');
-const offerAdress = document.querySelector('.popup__text--address');
-const offerPrice = document.querySelector('.popup__text--price');
-const offerType = document.querySelector('.popup__type');
-const offerCapacity = document.querySelector('.popup__text--capacity');
-const offerTime = document.querySelector('.popup__text--time');
-const offerFeatures = document.querySelector('.popup__features');
-const offerDescription = document.querySelector('.popup__description');
-const offerPhotos = document.querySelector('.popup__photos');
-const offerPhoto = document.querySelector('.popup__photo');
-const offerAvatar = document.querySelector('.popup__avatar');
+const popupTemplate = document.querySelector('#card').content;
+const popup = popupTemplate.querySelector('.popup');
 
-const changeRequiredItems = (notice) => {
-  offerTitle.textContent = notice.offer.title;
-  offerAdress.textContent = notice.offer.adress;
-  offerPrice.textContent = `${notice.offer.price} ₽/ночь`;
-  offerType.textContent = TYPE_DICTIONARY[notice.offer.type];
+const createCard = ({author, offer}) => {
+  // Клонирую шаблон попапа
+  const popupElement = popup.cloneNode(true);
 
-  offerCapacity.textContent = `${notice.offer.rooms} комнаты для ${notice.offer.guests} гостей`;
-  offerTime.textContent = `Заезд после ${notice.offer.checkin}, выезд до ${notice.offer.checkout}`;
+  // Редактирую содержимое склонированного попапа
+  popupElement.querySelector('.popup__title').textContent = offer.title;
+  popupElement.querySelector('.popup__text--address').textContent = offer.adress;
+  popupElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+  popupElement.querySelector('.popup__type').textContent = TYPE_DICTIONARY[offer.type];
+  popupElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+  popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  popupElement.querySelector('.popup__avatar').src = author.avatar;
 
-  // Всегда один и тот же ID
-  offerAvatar.src = notice.author.avatar;
-};
-
-const changeFeatures = () => {
+  // проверяю наличие особенностей
+  const offerFeatures = popupElement.querySelector('.popup__features');
   const featureList = offerFeatures.querySelectorAll('.popup__feature');
-  const featureModifiers = AD_FEATURES.map((feature) => `popup__feature--${feature}`);
+  const featureModifiers = offer.features.map((feature) => `popup__feature--${feature}`);
 
   featureList.forEach((featureItem) => {
     const modifier = featureItem.classList[1];
@@ -46,22 +34,31 @@ const changeFeatures = () => {
       featureItem.remove();
     }
   });
-};
 
-const checkDescription = () => {
+  if (!offer.features) {
+    offerFeatures.remove();
+  }
+
+  // проверяю наличие описания
+  const offerDescription = popupElement.querySelector('.popup__description');
   if (!offerDescription.textContent) {
     offerDescription.classList.add('hidden');
   }
+
+  // Проверяю фото
+  const offerPhotos = popupElement.querySelector('.popup__photos');
+  const offerPhoto = popupElement.querySelector('.popup__photo');
+
+  if(offer.photos) {
+    offerPhotos.innerHTML = '';
+    offer.photos.forEach((item) => {
+      const photoElement = offerPhoto.cloneNode(true);
+      photoElement.src = item;
+      offerPhotos.appendChild(photoElement);
+    });
+  }
+
+  return popupElement;
 };
 
-const checkPhotos = () => {
-  offerPhotos.innerHTML = '';
-
-  AD_PHOTOS.forEach((item) => {
-    const photoElement = offerPhoto.cloneNode(true);
-    photoElement.src = item;
-    offerPhotos.appendChild(photoElement);
-  });
-};
-
-export {changeRequiredItems, changeFeatures, checkDescription, checkPhotos};
+export {createCard};
