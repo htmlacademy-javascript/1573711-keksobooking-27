@@ -13,4 +13,5 @@ const makeActive = () => {
 };
 
 makeDisabled();
-makeActive();
+
+export {makeActive};
