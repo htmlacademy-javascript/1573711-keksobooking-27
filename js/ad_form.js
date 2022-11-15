@@ -1,3 +1,6 @@
+import { sendData } from './server.js';
+import { formSendError, formSendSuccess } from './util.js';
+
 const adForm = document.querySelector('.ad-form');
 
 const pristine = new Pristine(adForm, {
@@ -12,7 +15,7 @@ const pristine = new Pristine(adForm, {
 
 const adFormTitle = adForm.querySelector('#title');
 
-function validateTitle (value) {
+function validateTitle(value) {
   return value.length >= 30 && value.length <= 100;
 }
 
@@ -24,7 +27,7 @@ pristine.addValidator(
 const adFormPrice = adForm.querySelector('#price');
 const MAX_PRICE = 100000;
 
-function validatePrice () {
+function validatePrice() {
   return adFormPrice.value <= MAX_PRICE;
 }
 
@@ -44,7 +47,7 @@ const roomsOption = {
   '100': ['0'],
 };
 
-function validateCapacity () {
+function validateCapacity() {
   return roomsOption[adFormRooms.value].includes(adFormCapacity.value);
 }
 
@@ -69,17 +72,17 @@ const typeOption = {
   'palace': '10000',
 };
 
-function onTypeChange () {
+function onTypeChange() {
   adFormPrice.placeholder = typeOption[adFormType.value];
 }
 
 adFormType.addEventListener('change', onTypeChange);
 
-function validateType () {
+function validateType() {
   return adFormPrice.value >= typeOption[adFormType.value];
 }
 
-function validateTypeDescription () {
+function validateTypeDescription() {
   return `Сумма должна быть выше ${typeOption[adFormType.value]}`;
 }
 
@@ -125,7 +128,7 @@ const onTimeChange = (time, timeChange) => {
   time.value = timeChange.value;
 };
 
-function validateTimeIn () {
+function validateTimeIn() {
   adFormTimeOut.addEventListener(
     'change',
     onTimeChange(adFormTimeOut, adFormTimeIn));
@@ -133,7 +136,7 @@ function validateTimeIn () {
   return adFormTimeOut.value === adFormTimeIn.value;
 }
 
-function validateTimeOut () {
+function validateTimeOut() {
   adFormTimeIn.addEventListener(
     'change',
     onTimeChange(adFormTimeIn, adFormTimeOut
@@ -152,7 +155,20 @@ pristine.addValidator(
   validateTimeOut
 );
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      sendData(
+        onSuccess(),
+        formSendError(),
+        new FormData(evt.target));
+    }
+  });
+};
+
+setUserFormSubmit(formSendSuccess);
+
+export { adForm };

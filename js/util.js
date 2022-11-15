@@ -49,4 +49,63 @@ const makeCounter = () => {
   };
 };
 
-export {getRandomNumber, getRandomArbitrary, makeCounter, getRandomArray};
+const onError = (message) => {
+  const errorContainer = document.createElement('div');
+  errorContainer.style.zIndex = '100';
+  errorContainer.style.position = 'absolute';
+  errorContainer.style.left = '0';
+  errorContainer.style.top = '0';
+  errorContainer.style.right = '0';
+  errorContainer.style.padding = '10px 3px';
+  errorContainer.style.fontSize = '30px';
+  errorContainer.style.textAlign = 'center';
+  errorContainer.style.backgroundColor = 'red';
+  errorContainer.style.color = 'white';
+
+  errorContainer.textContent = message;
+
+  document.body.append(errorContainer);
+
+  setTimeout(() => {
+    errorContainer.remove();
+  }, 5000);
+};
+
+// Успешная отправка формы
+
+// const isEscapeKey = (evt) => evt.key === 'Escape';
+// const onEscapeKeydown = (element) => {
+//   if (isEscapeKey) {
+//     element.remove();
+//   }
+// };
+
+const formSendSuccess = () => {
+  const pageBody = document.querySelector('body');
+  const successContent = document.querySelector('#success').content;
+  const successElement = successContent.querySelector('.success');
+
+  const newSuccessElement = pageBody.appendChild(successElement);
+
+  // document.addEventListener('keydown', onEscapeKeydown(newSuccessElement));
+};
+
+// Неуспешная отправка формы
+
+const onErrorButtonClick = (element) => {
+  element.remove();
+};
+
+const formSendError = () => {
+  const pageBody = document.querySelector('body');
+  const errorContent = document.querySelector('#error').content;
+  const errorElement = errorContent.querySelector('.error');
+  const errorButton = errorContent.querySelector('.error__button');
+
+  const newErrorElement = pageBody.appendChild(errorElement);
+
+  errorButton.addEventListener('click', onErrorButtonClick(newErrorElement));
+  // document.addEventListener('keydown', onEscapeKeydown(newErrorElement));
+};
+
+export { getRandomNumber, getRandomArbitrary, makeCounter, getRandomArray, onError, formSendError, formSendSuccess };
