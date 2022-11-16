@@ -35,7 +35,6 @@ const createCard = ({author, offer}) => {
       }
     });
   }
-
   if (!offer.features) {
     offerFeatures.remove();
   }

@@ -11,6 +11,7 @@ const CENTER_COORDINATES = {
 const MAP_SCALE = 12;
 
 const address = document.querySelector('#address');
+// address.setAttribute('readonly', true);
 address.setAttribute('disabled', true);
 
 const map = L.map('map-canvas')
@@ -70,6 +71,7 @@ const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__
 const getInitialCoordinates = () => {
   marker.setLatLng(CENTER_COORDINATES);
   map.setView(CENTER_COORDINATES, MAP_SCALE);
+  map.closePopup();
   address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`;
 };
 

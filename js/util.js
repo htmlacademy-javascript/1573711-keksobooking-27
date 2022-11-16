@@ -73,21 +73,24 @@ const onError = (message) => {
 
 // Успешная отправка формы
 
-// const isEscapeKey = (evt) => evt.key === 'Escape';
-// const onEscapeKeydown = (element) => {
-//   if (isEscapeKey) {
-//     element.remove();
-//   }
-// };
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const formSendSuccess = () => {
   const pageBody = document.querySelector('body');
   const successContent = document.querySelector('#success').content;
   const successElement = successContent.querySelector('.success');
-
   const newSuccessElement = pageBody.appendChild(successElement);
 
-  // document.addEventListener('keydown', onEscapeKeydown(newSuccessElement));
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      newSuccessElement.remove();
+    }
+  });
+
+  document.addEventListener('click', () => {
+    newSuccessElement.remove();
+  });
 };
 
 // Неуспешная отправка формы
@@ -105,6 +108,17 @@ const formSendError = () => {
   const newErrorElement = pageBody.appendChild(errorElement);
 
   errorButton.addEventListener('click', onErrorButtonClick(newErrorElement));
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      newErrorElement.remove();
+    }
+  });
+
+  document.addEventListener('click', () => {
+    newErrorElement.remove();
+  });
   // document.addEventListener('keydown', onEscapeKeydown(newErrorElement));
 };
 

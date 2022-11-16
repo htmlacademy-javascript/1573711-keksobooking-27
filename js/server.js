@@ -31,14 +31,11 @@ const sendData = (onSuccess, onFail, body) =>
   )
     .then((response) => {
       if (response.ok) {
-        onSuccess();
+        return onSuccess();
       }
-      else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
-      }
+      throw new Error(`${response.status} ${response.statusText}`);
     })
-    .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
-    });
+    // Ошбибка в консоли при отправке, что onFail - не функция
+    .catch(() => onFail('Не удалось отправить форму. Попробуйте ещё раз'));
 
 export { getData, sendData };
