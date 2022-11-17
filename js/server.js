@@ -29,11 +29,10 @@ const sendData = (onSuccess, onFail, body) =>
       body: body,
     })
     .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
+      if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
+      onSuccess();
     })
     .catch(() => onFail());
 

@@ -64,9 +64,8 @@ marker.on('moveend', (evt) => {
   address.value = `${lat}, ${lng}`;
 });
 
-// Ставит карту на место при отправке/очистке
+// Ставит карту на место при очистке
 
-// const buttonSubmit = document.querySelector('.ad-form').querySelector('.ad-form__submit');
 const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__reset');
 
 const getInitialCoordinates = () => {
@@ -78,7 +77,6 @@ const getInitialCoordinates = () => {
   address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`;
 };
 
-// buttonSubmit.addEventListener('click', getInitialCoordinates);
 buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений

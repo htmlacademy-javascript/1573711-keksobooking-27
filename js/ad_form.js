@@ -155,6 +155,23 @@ pristine.addValidator(
   validateTimeOut
 );
 
+// Block submit button
+
+const buttonSubmit = document.querySelector('.ad-form').querySelector('.ad-form__submit');
+
+const blockSubmitButton = () => {
+  buttonSubmit.setAttribute('disabled', true);
+  buttonSubmit.textContent = 'Публикуется...';
+};
+
+// Unblock submit button
+const unblockSubmitButton = () => {
+  buttonSubmit.removeAttribute('disabled');
+  buttonSubmit.textContent = 'Опубликвать';
+};
+
+// buttonSubmit.addEventListener('click', getInitialCoordinates);
+
 const setUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -162,10 +179,12 @@ const setUserFormSubmit = (onSuccess, onError) => {
     const isValid = pristine.validate();
     const formData = new FormData(adForm);
     if (isValid) {
+      blockSubmitButton();
       sendData(
         onSuccess,
         onError,
         formData);
+      unblockSubmitButton();
     }
   });
 };
