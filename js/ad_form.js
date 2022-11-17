@@ -172,4 +172,4 @@ const setUserFormSubmit = (onSuccess, onError) => {
 
 setUserFormSubmit(formSendSuccess, formSendError);
 
-export { adForm };
+export { adForm, sliderElement };

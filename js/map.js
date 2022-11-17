@@ -2,6 +2,7 @@ import { makeActive } from './form.js';
 import { createCard } from './ads_generator.js';
 import { getData } from './server.js';
 import { onError } from './util.js';
+import { adForm, sliderElement } from './ad_form.js';
 
 const CENTER_COORDINATES = {
   lat: 35.68950,
@@ -65,17 +66,19 @@ marker.on('moveend', (evt) => {
 
 // Ставит карту на место при отправке/очистке
 
-const buttonSubmit = document.querySelector('.ad-form').querySelector('.ad-form__submit');
+// const buttonSubmit = document.querySelector('.ad-form').querySelector('.ad-form__submit');
 const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__reset');
 
 const getInitialCoordinates = () => {
+  adForm.reset();
+  sliderElement.noUiSlider.set(1000);
   marker.setLatLng(CENTER_COORDINATES);
   map.setView(CENTER_COORDINATES, MAP_SCALE);
   map.closePopup();
   address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`;
 };
 
-buttonSubmit.addEventListener('click', getInitialCoordinates);
+// buttonSubmit.addEventListener('click', getInitialCoordinates);
 buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений

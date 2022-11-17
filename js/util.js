@@ -74,12 +74,18 @@ const onError = (message) => {
 // Успешная отправка формы
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
+const pageBody = document.querySelector('body');
+
+// нахожу шаблон успеха
+const successContent = document.querySelector('#success').content;
+const successElement = successContent.querySelector('.success');
+
+// нахожу шаблон ошибки
+const errorContent = document.querySelector('#error').content;
+const errorElement = errorContent.querySelector('.error');
 
 const formSendSuccess = () => {
-  const pageBody = document.querySelector('body');
-  const successContent = document.querySelector('#success').content;
-  const successElement = successContent.querySelector('.success');
-  const newSuccessElement = pageBody.appendChild(successElement);
+  const newSuccessElement = successElement.cloneNode(true);
 
   document.addEventListener('keydown', (evt) => {
     if (isEscapeKey(evt)) {
@@ -87,23 +93,17 @@ const formSendSuccess = () => {
       newSuccessElement.remove();
     }
   });
-
   document.addEventListener('click', () => {
     newSuccessElement.remove();
   });
+
+  pageBody.appendChild(newSuccessElement);
 };
 
 // Неуспешная отправка формы
 
-// не работает, указывает ошибку:
-//util.js:104 Uncaught (in promise) TypeError:
-//Failed to execute 'appendChild' on 'Node':
-//parameter 1 is not of type 'Node'.
 const formSendError = () => {
-  const pageBody = document.querySelector('body');
-  const errorContent = document.querySelector('#error').content;
-  const errorElement = errorContent.querySelector('.error');
-  const newErrorElement = pageBody.appendChild(errorElement);
+  const newErrorElement = errorElement.cloneNode(true);
 
   document.addEventListener('keydown', (evt) => {
     if (isEscapeKey(evt)) {
@@ -115,6 +115,8 @@ const formSendError = () => {
   document.addEventListener('click', () => {
     newErrorElement.remove();
   });
+
+  pageBody.appendChild(newErrorElement);
 };
 
 export { getRandomNumber, getRandomArbitrary, makeCounter, getRandomArray, onError, formSendError, formSendSuccess };
