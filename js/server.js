@@ -26,16 +26,14 @@ const sendData = (onSuccess, onFail, body) =>
     {
       method: 'POST',
       credentials: 'same-origin',
-      body,
-    }
-  )
+      body: body,
+    })
     .then((response) => {
       if (response.ok) {
-        return onSuccess();
+        onSuccess();
       }
       throw new Error(`${response.status} ${response.statusText}`);
     })
-    // Ошбибка в консоли при отправке, что onFail - не функция
-    .catch(() => onFail('Не удалось отправить форму. Попробуйте ещё раз'));
+    .catch(() => onFail());
 
 export { getData, sendData };

@@ -95,19 +95,15 @@ const formSendSuccess = () => {
 
 // Неуспешная отправка формы
 
-const onErrorButtonClick = (element) => {
-  element.remove();
-};
-
+// не работает, указывает ошибку:
+//util.js:104 Uncaught (in promise) TypeError:
+//Failed to execute 'appendChild' on 'Node':
+//parameter 1 is not of type 'Node'.
 const formSendError = () => {
   const pageBody = document.querySelector('body');
   const errorContent = document.querySelector('#error').content;
   const errorElement = errorContent.querySelector('.error');
-  const errorButton = errorContent.querySelector('.error__button');
-
   const newErrorElement = pageBody.appendChild(errorElement);
-
-  errorButton.addEventListener('click', onErrorButtonClick(newErrorElement));
 
   document.addEventListener('keydown', (evt) => {
     if (isEscapeKey(evt)) {
@@ -119,7 +115,6 @@ const formSendError = () => {
   document.addEventListener('click', () => {
     newErrorElement.remove();
   });
-  // document.addEventListener('keydown', onEscapeKeydown(newErrorElement));
 };
 
 export { getRandomNumber, getRandomArbitrary, makeCounter, getRandomArray, onError, formSendError, formSendSuccess };

@@ -155,20 +155,21 @@ pristine.addValidator(
   validateTimeOut
 );
 
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
+    const formData = new FormData(adForm);
     if (isValid) {
       sendData(
-        onSuccess(),
-        formSendError(),
-        new FormData(evt.target));
+        onSuccess,
+        onError,
+        formData);
     }
   });
 };
 
-setUserFormSubmit(formSendSuccess);
+setUserFormSubmit(formSendSuccess, formSendError);
 
 export { adForm };
