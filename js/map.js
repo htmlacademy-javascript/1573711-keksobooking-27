@@ -1,20 +1,25 @@
-import {makeActive} from './form.js';
-import {createArray} from './data.js';
-import {createCard} from './ads_generator.js';
+import { makeActive } from './form.js';
+import { createCard } from './ads_generator.js';
+import { getData } from './server.js';
+import { onError } from './util.js';
+import { adForm, sliderElement } from './ad_form.js';
 
 const CENTER_COORDINATES = {
   lat: 35.68950,
   lng: 139.69171,
 };
 
+const MAP_SCALE = 12;
+
 const address = document.querySelector('#address');
-address.setAttribute('disabled', true);
+address.setAttribute('readonly', true);
+// address.setAttribute('disabled', true);
 
 const map = L.map('map-canvas')
   .on('load', () => {
     makeActive();
   })
-  .setView(CENTER_COORDINATES, 12);
+  .setView(CENTER_COORDINATES, MAP_SCALE);
 
 // добавляю слой с картой
 L.tileLayer(
@@ -59,7 +64,20 @@ marker.on('moveend', (evt) => {
   address.value = `${lat}, ${lng}`;
 });
 
-const adsArray = createArray();
+// Ставит карту на место при очистке
+
+const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__reset');
+
+const getInitialCoordinates = () => {
+  adForm.reset();
+  sliderElement.noUiSlider.set(1000);
+  marker.setLatLng(CENTER_COORDINATES);
+  map.setView(CENTER_COORDINATES, MAP_SCALE);
+  map.closePopup();
+  address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`;
+};
+
+buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений
 const createMarker = (offer) => {
@@ -78,6 +96,6 @@ const createMarker = (offer) => {
     .bindPopup(createCard(offer));
 };
 
-adsArray.forEach((offer) => {
-  createMarker(offer);
-});
+getData(createMarker, onError);
+
+export {getInitialCoordinates};

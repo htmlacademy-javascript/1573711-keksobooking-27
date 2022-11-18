@@ -25,16 +25,16 @@ const createCard = ({author, offer}) => {
   // проверяю наличие особенностей
   const offerFeatures = popupElement.querySelector('.popup__features');
   const featureList = offerFeatures.querySelectorAll('.popup__feature');
-  const featureModifiers = offer.features.map((feature) => `popup__feature--${feature}`);
 
-  featureList.forEach((featureItem) => {
-    const modifier = featureItem.classList[1];
-
-    if (!featureModifiers.includes(modifier)) {
-      featureItem.remove();
-    }
-  });
-
+  if (offer.features) {
+    const featureModifiers = offer.features.map((feature) => `popup__feature--${feature}`);
+    featureList.forEach((featureItem) => {
+      const modifier = featureItem.classList[1];
+      if (!featureModifiers.includes(modifier)) {
+        featureItem.remove();
+      }
+    });
+  }
   if (!offer.features) {
     offerFeatures.remove();
   }
