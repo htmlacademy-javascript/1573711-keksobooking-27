@@ -1,5 +1,3 @@
-import { getRandomArray } from './util.js';
-
 const GET_URL = 'https://27.javascript.pages.academy/keksobooking/data';
 const SEND_URL = 'https://27.javascript.pages.academy/keksobooking';
 
@@ -11,11 +9,8 @@ const getData = (onSuccess, onFail) => fetch(GET_URL)
     throw new Error(`${response.status} ${response.statusText}`);
   })
   .then((adds) => {
-    getRandomArray(adds)
-      .slice(0, 10)
-      .forEach((offer) => {
-        onSuccess(offer);
-      });
+    const newArray = adds.slice();
+    onSuccess(newArray);
   })
   .catch(() => {
     onFail('Произошла ошибка при загрузке. Попробуйте снова.');

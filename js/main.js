@@ -6,3 +6,5 @@ import './ad_form.js';
 import './map.js';
 import './server.js';
 import './debounce.js';
+import './sort.js';
+
