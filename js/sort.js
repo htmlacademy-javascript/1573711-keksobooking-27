@@ -1,6 +1,7 @@
-import { getData } from './server.js';
-import { onError } from './util.js';
-import { createMarker } from './map.js';
+// import { getData } from './server.js';
+// import { onError } from './util.js';
+import { debounce } from './debounce.js';
+import { createMarker, removeAllMarkers } from './map.js';
 
 
 const findPrice = (price) => {
@@ -54,20 +55,24 @@ const getAdRank = (ad) => {
 // функция сортировки
 
 const compareAdds = (firstAd, secondAd) => {
-  const firasRank = getAdRank(firstAd);
+  const firstRank = getAdRank(firstAd);
   const secondRank = getAdRank(secondAd);
 
-  return secondRank - firasRank;
+  return secondRank - firstRank;
 };
 
-const onFilterInputChange = (array) => {
-  const newArray = array.sort(compareAdds).slice(0, 10);
-  createMarker(newArray);
-};
+// сортирует массив, полученный с сервера, и отрисовывает маркеры
 
 const sortAddsArray = (array) => {
   const form = document.querySelector('.map__filters');
-  form.addEventListener('change', onFilterInputChange(array));
+  // console.log(form);
+
+  form.addEventListener('change', debounce(() => {
+    removeAllMarkers();
+    const newArray = array.sort(compareAdds).slice(0, 10);
+    // console.log(newArray);
+    createMarker(newArray);
+  }, 500));
 };
 
-getData(sortAddsArray, onError);
+export {sortAddsArray, compareAdds};

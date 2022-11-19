@@ -1,16 +1,18 @@
+// import {sortAddsArray, compareAdds} from './sort.js';
+
 const GET_URL = 'https://27.javascript.pages.academy/keksobooking/data';
 const SEND_URL = 'https://27.javascript.pages.academy/keksobooking';
 
-const getData = (onSuccess, onFail) => fetch(GET_URL)
+const getData = (onFail) => fetch(GET_URL)
   .then((response) => {
-    if (response.ok) {
-      return response.json();
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`);
     }
-    throw new Error(`${response.status} ${response.statusText}`);
+    return response.json();
   })
   .then((adds) => {
-    const newArray = adds.slice();
-    onSuccess(newArray);
+    console.log(adds);
+    // console.log(adds.sort(compareAdds));
   })
   .catch(() => {
     onFail('Произошла ошибка при загрузке. Попробуйте снова.');

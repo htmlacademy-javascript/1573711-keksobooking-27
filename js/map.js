@@ -78,6 +78,9 @@ const getInitialCoordinates = () => {
 buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений
+
+const markerGroup = L.layerGroup().addTo(map);
+
 const createMarker = (offer) => {
   const markerSmall = L.marker(
     {
@@ -90,8 +93,14 @@ const createMarker = (offer) => {
   );
 
   markerSmall
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(createCard(offer));
 };
 
-export { getInitialCoordinates, createMarker };
+// удаление маркеров
+const removeAllMarkers = () => {
+  markerGroup.clearLayers();
+};
+
+
+export { getInitialCoordinates, createMarker, removeAllMarkers };
