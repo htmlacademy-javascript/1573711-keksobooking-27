@@ -1,5 +1,3 @@
-// import { getData } from './server.js';
-// import { onError } from './util.js';
 import { debounce } from './debounce.js';
 import { createMarker, removeAllMarkers } from './map.js';
 
@@ -20,33 +18,35 @@ const getAdRank = (ad) => {
   const housingPriceInput = document.querySelector('#housing-price');
   const housingRoomsInput = document.querySelector('#housing-rooms');
   const housingGuestsInput = document.querySelector('#housing-guests');
-  const housingFeaturesCheckbox = document.querySelectorAll('.map__checkbox');
+  const housingFeaturesCheckbox = document.querySelectorAll('.map__checkbox:checked');
+  console.log(housingFeaturesCheckbox);
 
   // считаю рейтинг объявления
   let rank = 0;
 
   // тип
-  if (ad.offer.type === housingTypeInput.value || ad.offer.type === 'any') {
+  if (ad.offer.type === housingTypeInput.value) {
     rank += 1;
   }
   // цена
   const priceRange = findPrice(ad.offer.price);
-  if (priceRange === housingPriceInput.value || ad.offer.type === 'any') {
+  if (priceRange === housingPriceInput.value) {
     rank += 1;
   }
   // комнаты
-  if (ad.offer.rooms === housingRoomsInput.value || ad.offer.type === 'any') {
+  if (ad.offer.rooms.toString() === housingRoomsInput.value.toString()) {
     rank += 1;
   }
+  // console.log(rank);
   // гости
-  if (ad.offer.guests === housingGuestsInput.value || ad.offer.type === 'any') {
+  if (ad.offer.guests.toString() === housingGuestsInput.value.toString()) {
     rank += 1;
   }
   // особенности
-  housingFeaturesCheckbox.forEach((feature) => {
-    if (feature.checked) {
-      rank += 1;
-    }
+  housingFeaturesCheckbox.forEach((element) => {
+    const feature = ad.offer.feature;
+    
+    rank += 1;
   });
 
   return rank;
@@ -65,13 +65,12 @@ const compareAdds = (firstAd, secondAd) => {
 
 const sortAddsArray = (array) => {
   const form = document.querySelector('.map__filters');
-  // console.log(form);
 
   form.addEventListener('change', debounce(() => {
     removeAllMarkers();
     const newArray = array.sort(compareAdds).slice(0, 10);
-    // console.log(newArray);
-    createMarker(newArray);
+    console.log(newArray);
+    newArray.forEach((ad) => createMarker(ad));
   }, 500));
 };
 

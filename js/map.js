@@ -102,5 +102,4 @@ const removeAllMarkers = () => {
   markerGroup.clearLayers();
 };
 
-
 export { getInitialCoordinates, createMarker, removeAllMarkers };
