@@ -19,7 +19,6 @@ const getAdRank = (ad) => {
   const housingRoomsInput = document.querySelector('#housing-rooms');
   const housingGuestsInput = document.querySelector('#housing-guests');
   const housingFeaturesCheckbox = document.querySelectorAll('.map__checkbox:checked');
-  console.log(housingFeaturesCheckbox);
 
   // считаю рейтинг объявления
   let rank = 0;
@@ -42,13 +41,17 @@ const getAdRank = (ad) => {
   if (ad.offer.guests.toString() === housingGuestsInput.value.toString()) {
     rank += 1;
   }
-  // особенности
-  housingFeaturesCheckbox.forEach((element) => {
-    const feature = ad.offer.feature;
-    
-    rank += 1;
-  });
 
+  // особенности
+  if (ad.offer.features) {
+    const featureModifiers = ad.offer.features.map((feature) => `filter-${feature}`);
+
+    housingFeaturesCheckbox.forEach((element) => {
+      if(featureModifiers.includes(element.id)) {
+        rank += 1;
+      }
+    });
+  }
   return rank;
 };
 
@@ -69,7 +72,6 @@ const sortAddsArray = (array) => {
   form.addEventListener('change', debounce(() => {
     removeAllMarkers();
     const newArray = array.sort(compareAdds).slice(0, 10);
-    console.log(newArray);
     newArray.forEach((ad) => createMarker(ad));
   }, 500));
 };
