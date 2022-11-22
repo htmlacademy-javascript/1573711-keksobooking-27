@@ -46,10 +46,8 @@ const getAdRank = (ad) => {
 
   // особенности
   if (ad.offer.features) {
-    const featureModifiers = ad.offer.features.map((feature) => `filter-${feature}`);
-
     housingFeaturesCheckbox.forEach((element) => {
-      if (featureModifiers.includes(element.id)) {
+      if (ad.offer.features.includes(element.value)) {
         rank += 1;
       }
     });
@@ -73,16 +71,24 @@ const addsFiltering = (array) => {
   const housingPriceInput = document.querySelector('#housing-price');
   const housingRoomsInput = document.querySelector('#housing-rooms');
   const housingGuestsInput = document.querySelector('#housing-guests');
+  const housingFeaturesCheckbox = Array.from(document.querySelectorAll('.map__checkbox:checked'));
 
   const filter = array.filter((ad) => {
     const priceRange = findPrice(ad.offer.price);
+
+    const featuresCheck = () => {
+      if (ad.offer.features) {
+        return housingFeaturesCheckbox.every((element) => ad.offer.features.includes(element.value));
+      }
+    };
 
     const type = ad.offer.type === housingTypeInput.value || housingTypeInput.value === 'any';
     const price = priceRange === housingPriceInput.value || housingPriceInput.value === 'any';
     const rooms = ad.offer.rooms.toString() === housingRoomsInput.value.toString() || housingRoomsInput.value === 'any';
     const guests = ad.offer.guests.toString() === housingGuestsInput.value.toString() || housingGuestsInput.value === 'any';
+    const features = featuresCheck();
 
-    const conditions = type && price && rooms && guests;
+    const conditions = type && price && rooms && guests && features;
     return conditions;
   });
   return filter;
