@@ -77,14 +77,15 @@ const addsFiltering = (array) => {
   const filter = array.filter((ad) => {
     const priceRange = findPrice(ad.offer.price);
 
-    const conditions = ad.offer.type === housingTypeInput.value || housingTypeInput.value === 'any' &&
-      priceRange === housingPriceInput.value || housingPriceInput.value === 'any' &&
-      ad.offer.rooms.toString() === housingRoomsInput.value.toString() || housingRoomsInput.value === 'any' &&
-      ad.offer.guests.toString() === housingGuestsInput.value.toString() || housingGuestsInput.value === 'any';
+    const type = ad.offer.type === housingTypeInput.value || housingTypeInput.value === 'any';
+    const price = priceRange === housingPriceInput.value || housingPriceInput.value === 'any';
+    const rooms = ad.offer.rooms.toString() === housingRoomsInput.value.toString() || housingRoomsInput.value === 'any';
+    const guests = ad.offer.guests.toString() === housingGuestsInput.value.toString() || housingGuestsInput.value === 'any';
 
+    const conditions = type && price && rooms && guests;
     return conditions;
   });
-  console.log(filter);
+  return filter;
 };
 
 // сортирует массив, полученный с сервера, и отрисовывает маркеры
@@ -95,8 +96,8 @@ const sortAddsArray = (array) => {
   form.addEventListener('change', debounce(() => {
     removeAllMarkers();
     const sortArray = array.sort(compareAdds).slice(0, 10);
-    console.log(addsFiltering(sortArray));
-    sortArray.forEach((ad) => createMarker(ad));
+    const filterArray = addsFiltering(sortArray);
+    filterArray.forEach((ad) => createMarker(ad));
   }, 500));
 };
 
