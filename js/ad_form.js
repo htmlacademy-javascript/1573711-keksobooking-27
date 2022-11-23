@@ -179,10 +179,15 @@ const setUserFormSubmit = (onSuccess, onError) => {
       blockSubmitButton();
       const formData = new FormData(adForm);
       sendData(
-        onSuccess,
-        onError,
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          onError();
+          unblockSubmitButton();
+        },
         formData);
-      unblockSubmitButton();
     }
   });
 };
