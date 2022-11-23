@@ -1,7 +1,5 @@
 import { makeActive } from './form.js';
 import { createCard } from './ads_generator.js';
-import { getData } from './server.js';
-import { onError } from './util.js';
 import { adForm, sliderElement } from './ad_form.js';
 
 const CENTER_COORDINATES = {
@@ -38,7 +36,7 @@ const icon = L.icon({
 
 // маленькая иконка
 const similarIcon = L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: '../img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
@@ -80,6 +78,9 @@ const getInitialCoordinates = () => {
 buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений
+
+const markerGroup = L.layerGroup().addTo(map);
+
 const createMarker = (offer) => {
   const markerSmall = L.marker(
     {
@@ -87,15 +88,18 @@ const createMarker = (offer) => {
       lng: offer.location.lng,
     },
     {
-      similarIcon,
+      icon: similarIcon,
     }
   );
 
   markerSmall
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(createCard(offer));
 };
 
-getData(createMarker, onError);
+// удаление маркеров
+const removeAllMarkers = () => {
+  markerGroup.clearLayers();
+};
 
-export {getInitialCoordinates};
+export { getInitialCoordinates, createMarker, removeAllMarkers };
