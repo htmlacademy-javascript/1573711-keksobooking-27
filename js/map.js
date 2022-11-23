@@ -11,7 +11,6 @@ const MAP_SCALE = 12;
 
 const address = document.querySelector('#address');
 address.setAttribute('readonly', true);
-// address.setAttribute('disabled', true);
 
 const map = L.map('map-canvas')
   .on('load', () => {

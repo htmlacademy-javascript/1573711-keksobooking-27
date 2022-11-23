@@ -7,4 +7,4 @@ import './map.js';
 import './server.js';
 import './debounce.js';
 import './sort.js';
-
+import './photos.js';
