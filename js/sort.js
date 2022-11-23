@@ -1,7 +1,6 @@
 import { debounce } from './debounce.js';
 import { createMarker, removeAllMarkers } from './map.js';
 
-
 const findPrice = (price) => {
   if (price >= 0 && price < 10000) {
     return 'low';

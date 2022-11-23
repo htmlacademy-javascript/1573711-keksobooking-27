@@ -6,11 +6,12 @@ const CENTER_COORDINATES = {
   lat: 35.68950,
   lng: 139.69171,
 };
-
 const MAP_SCALE = 12;
 
+const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__reset');
 const address = document.querySelector('#address');
 address.setAttribute('readonly', true);
+
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -62,8 +63,6 @@ marker.on('moveend', (evt) => {
 });
 
 // Ставит карту на место при очистке
-
-const buttonReset = document.querySelector('.ad-form').querySelector('.ad-form__reset');
 
 const getInitialCoordinates = () => {
   adForm.reset();

@@ -2,6 +2,32 @@ import { sendData } from './server.js';
 import { formSendError, formSendSuccess } from './util.js';
 
 const adForm = document.querySelector('.ad-form');
+const adFormTitle = adForm.querySelector('#title');
+const adFormPrice = adForm.querySelector('#price');
+const MAX_PRICE = 100000;
+const adFormRooms = adForm.querySelector('#room_number');
+const adFormCapacity = adForm.querySelector('#capacity');
+const adFormType = adForm.querySelector('#type');
+const sliderElement = document.querySelector('.ad-form__slider');
+const adFormTimeIn = adForm.querySelector('#timein');
+const adFormTimeOut = adForm.querySelector('#timeout');
+const filtersForm = document.querySelector('.map__filters');
+const buttonSubmit = adForm.querySelector('.ad-form__submit');
+
+const typeOption = {
+  'bungalow': '0',
+  'flat': '1000',
+  'hotel': '3000',
+  'house': '5000',
+  'palace': '10000',
+};
+
+const roomsOption = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0'],
+};
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -13,8 +39,6 @@ const pristine = new Pristine(adForm, {
 
 // Validate title
 
-const adFormTitle = adForm.querySelector('#title');
-
 function validateTitle(value) {
   return value.length >= 30 && value.length <= 100;
 }
@@ -23,9 +47,6 @@ pristine.addValidator(
   adFormTitle,
   validateTitle,
   'Введите от 30 до 100 символов');
-
-const adFormPrice = adForm.querySelector('#price');
-const MAX_PRICE = 100000;
 
 function validatePrice() {
   return adFormPrice.value <= MAX_PRICE;
@@ -37,15 +58,6 @@ pristine.addValidator(
   'Цена не должна превышать 100000!');
 
 // Validate room and capacity
-
-const adFormRooms = adForm.querySelector('#room_number');
-const adFormCapacity = adForm.querySelector('#capacity');
-const roomsOption = {
-  '1': ['1'],
-  '2': ['1', '2'],
-  '3': ['1', '2', '3'],
-  '100': ['0'],
-};
 
 function validateCapacity() {
   return roomsOption[adFormRooms.value].includes(adFormCapacity.value);
@@ -62,15 +74,6 @@ pristine.addValidator(
   'Вы вряд ли сюда влезете');
 
 // Validate Type and Price
-
-const adFormType = adForm.querySelector('#type');
-const typeOption = {
-  'bungalow': '0',
-  'flat': '1000',
-  'hotel': '3000',
-  'house': '5000',
-  'palace': '10000',
-};
 
 function onTypeChange() {
   adFormPrice.placeholder = typeOption[adFormType.value];
@@ -93,8 +96,6 @@ pristine.addValidator(
 );
 
 // No UI Price slider
-
-const sliderElement = document.querySelector('.ad-form__slider');
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -120,9 +121,6 @@ sliderElement.noUiSlider.on('update', () => {
 });
 
 // Validate checkin and checkout
-
-const adFormTimeIn = adForm.querySelector('#timein');
-const adFormTimeOut = adForm.querySelector('#timeout');
 
 const onTimeChange = (time, timeChange) => {
   time.value = timeChange.value;
@@ -156,7 +154,6 @@ pristine.addValidator(
 );
 
 // reser button
-const filtersForm = document.querySelector('.map__filters');
 
 const resetButton = adForm.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', () => {
@@ -164,8 +161,6 @@ resetButton.addEventListener('click', () => {
 });
 
 // Block submit button
-
-const buttonSubmit = adForm.querySelector('.ad-form__submit');
 
 const blockSubmitButton = () => {
   buttonSubmit.setAttribute('disabled', true);
