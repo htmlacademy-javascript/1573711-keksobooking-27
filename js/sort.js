@@ -1,5 +1,3 @@
-// import { getData } from './server.js';
-// import { onError } from './util.js';
 import { debounce } from './debounce.js';
 import { createMarker, removeAllMarkers } from './map.js';
 
@@ -20,35 +18,40 @@ const getAdRank = (ad) => {
   const housingPriceInput = document.querySelector('#housing-price');
   const housingRoomsInput = document.querySelector('#housing-rooms');
   const housingGuestsInput = document.querySelector('#housing-guests');
-  const housingFeaturesCheckbox = document.querySelectorAll('.map__checkbox');
+  const housingFeaturesCheckbox = document.querySelectorAll('.map__checkbox:checked');
 
   // считаю рейтинг объявления
   let rank = 0;
 
   // тип
-  if (ad.offer.type === housingTypeInput.value || ad.offer.type === 'any') {
+  if (ad.offer.type === housingTypeInput.value) {
     rank += 1;
   }
+
   // цена
   const priceRange = findPrice(ad.offer.price);
-  if (priceRange === housingPriceInput.value || ad.offer.type === 'any') {
+  if (priceRange === housingPriceInput.value) {
     rank += 1;
   }
-  // комнаты
-  if (ad.offer.rooms === housingRoomsInput.value || ad.offer.type === 'any') {
-    rank += 1;
-  }
-  // гости
-  if (ad.offer.guests === housingGuestsInput.value || ad.offer.type === 'any') {
-    rank += 1;
-  }
-  // особенности
-  housingFeaturesCheckbox.forEach((feature) => {
-    if (feature.checked) {
-      rank += 1;
-    }
-  });
 
+  // комнаты
+  if (ad.offer.rooms.toString() === housingRoomsInput.value.toString()) {
+    rank += 1;
+  }
+
+  // гости
+  if (ad.offer.guests.toString() === housingGuestsInput.value.toString()) {
+    rank += 1;
+  }
+
+  // особенности
+  if (ad.offer.features) {
+    housingFeaturesCheckbox.forEach((element) => {
+      if (ad.offer.features.includes(element.value)) {
+        rank += 1;
+      }
+    });
+  }
   return rank;
 };
 
@@ -61,18 +64,47 @@ const compareAdds = (firstAd, secondAd) => {
   return secondRank - firstRank;
 };
 
+// фильтрация массива
+
+const addsFiltering = (array) => {
+  const housingTypeInput = document.querySelector('#housing-type');
+  const housingPriceInput = document.querySelector('#housing-price');
+  const housingRoomsInput = document.querySelector('#housing-rooms');
+  const housingGuestsInput = document.querySelector('#housing-guests');
+  const housingFeaturesCheckbox = Array.from(document.querySelectorAll('.map__checkbox:checked'));
+
+  const filter = array.filter((ad) => {
+    const priceRange = findPrice(ad.offer.price);
+
+    const featuresCheck = () => {
+      if (ad.offer.features) {
+        return housingFeaturesCheckbox.every((element) => ad.offer.features.includes(element.value));
+      }
+    };
+
+    const type = ad.offer.type === housingTypeInput.value || housingTypeInput.value === 'any';
+    const price = priceRange === housingPriceInput.value || housingPriceInput.value === 'any';
+    const rooms = ad.offer.rooms.toString() === housingRoomsInput.value.toString() || housingRoomsInput.value === 'any';
+    const guests = ad.offer.guests.toString() === housingGuestsInput.value.toString() || housingGuestsInput.value === 'any';
+    const features = featuresCheck();
+
+    const conditions = type && price && rooms && guests && features;
+    return conditions;
+  });
+  return filter;
+};
+
 // сортирует массив, полученный с сервера, и отрисовывает маркеры
 
 const sortAddsArray = (array) => {
   const form = document.querySelector('.map__filters');
-  // console.log(form);
 
   form.addEventListener('change', debounce(() => {
     removeAllMarkers();
-    const newArray = array.sort(compareAdds).slice(0, 10);
-    // console.log(newArray);
-    createMarker(newArray);
+    const sortArray = array.sort(compareAdds).slice(0, 10);
+    const filterArray = addsFiltering(sortArray);
+    filterArray.forEach((ad) => createMarker(ad));
   }, 500));
 };
 
-export {sortAddsArray, compareAdds};
+export { sortAddsArray, compareAdds };
