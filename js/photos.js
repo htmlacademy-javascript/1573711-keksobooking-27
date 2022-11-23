@@ -1,8 +1,10 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-
-// показывает превью аватарки
 const avatar = document.querySelector('#avatar');
 const avatarImage = document.querySelector('.ad-form-header__preview-image');
+const image = document.querySelector('#images');
+const photoElement = document.querySelector('.ad-form__photo-preview');
+
+// показывает превью аватарки
 
 avatar.addEventListener('change', () => {
   const file = avatar.files[0];
@@ -16,8 +18,6 @@ avatar.addEventListener('change', () => {
 });
 
 // показывает превью фото для объявления
-const image = document.querySelector('#images');
-const photoElement = document.querySelector('.ad-form__photo-preview');
 
 image.addEventListener('change', () => {
   const file = image.files[0];
