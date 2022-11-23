@@ -155,6 +155,14 @@ pristine.addValidator(
   validateTimeOut
 );
 
+// reser button
+const filtersForm = document.querySelector('.map__filters');
+
+const resetButton = adForm.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', () => {
+  filtersForm.reset();
+});
+
 // Block submit button
 
 const buttonSubmit = adForm.querySelector('.ad-form__submit');
