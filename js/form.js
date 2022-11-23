@@ -1,22 +1,31 @@
-const adFormElements = document.querySelectorAll('.ad-form__element');
-const mapFilters = document.querySelectorAll('.map__filter');
+const adFormElements = document.querySelector('.ad-form');
+const adFormElement = document.querySelectorAll('.ad-form__element');
+const mapFilters = document.querySelector('.map__filters');
+const mapFilter = document.querySelectorAll('.map__filter');
+const mapFeatures = document.querySelector('.map__features');
 
 const makeDisabled = () => {
-  adFormElements.forEach((element) => {
+  adFormElements.classList.add('ad-form--disabled');
+  adFormElement.forEach((element) => {
     element.setAttribute('disabled', true);
   });
-  mapFilters.forEach ((element) => {
+  mapFilters.classList.add('map__filters--disabled');
+  mapFilter.forEach ((element) => {
     element.setAttribute('disabled', true);
   });
+  mapFeatures.setAttribute('disabled', true);
 };
 
 const makeActive = () => {
-  adFormElements.forEach((element) => {
+  adFormElements.classList.remove('ad-form--disabled');
+  adFormElement.forEach((element) => {
     element.removeAttribute('disabled');
   });
-  mapFilters.forEach ((element) => {
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFilter.forEach ((element) => {
     element.removeAttribute('disabled', true);
   });
+  mapFeatures.removeAttribute('disabled');
 };
 
 makeDisabled();
