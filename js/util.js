@@ -33,12 +33,12 @@ const onEscapyKeydown = (element) => (evt) => {
     evt.preventDefault();
     element.remove();
   }
-  document.removeEventListener('keydown', onEscapyKeydown);
+  document.removeEventListener('keydown', onEscapyKeydown(element));
 };
 
 const onModalClick = (element) => {
   element.remove();
-  document.removeEventListener('click', onModalClick);
+  document.removeEventListener('click', onModalClick(element));
 };
 
 // нахожу шаблон успеха
@@ -49,7 +49,9 @@ const successElement = successContent.querySelector('.success');
 const formSendSuccess = () => {
   const newSuccessElement = successElement.cloneNode(true);
 
-  document.addEventListener('click', onModalClick(newSuccessElement));
+  document.addEventListener('click', () => {
+    onModalClick(newSuccessElement);
+  });
   document.addEventListener('keydown', onEscapyKeydown(newSuccessElement));
 
   pageBody.appendChild(newSuccessElement);
@@ -65,10 +67,9 @@ const formSendError = () => {
   const newErrorElement = errorElement.cloneNode(true);
 
   document.addEventListener('keydown', onEscapyKeydown(newErrorElement));
-  document.addEventListener('click', onModalClick(newErrorElement));
-
-  // document.addEventListener('click', () =>
-  // newErrorElement.remove());
+  document.addEventListener('click', () => {
+    onModalClick(formSendError);
+  });
 };
 
 export { onError, formSendError, formSendSuccess };
