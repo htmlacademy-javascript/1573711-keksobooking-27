@@ -1,8 +1,12 @@
 import { makeActive } from './form.js';
 import { createCard } from './ads_generator.js';
-import { adForm, sliderElement } from './ad_form.js';
+import { avatarImage, photoElement, DEFAULT_AVATAR } from './photos.js';
+import { getData } from './server.js';
+import { adForm, sliderElement, pristine, filtersForm } from './ad_form.js';
+import { onError } from './util.js';
 
-const CENTER_COORDINATES = {
+
+const centerCoordinates = {
   lat: 35.68950,
   lng: 139.69171,
 };
@@ -17,7 +21,7 @@ const map = L.map('map-canvas')
   .on('load', () => {
     makeActive();
   })
-  .setView(CENTER_COORDINATES, MAP_SCALE);
+  .setView(centerCoordinates, MAP_SCALE);
 
 // добавляю слой с картой
 L.tileLayer(
@@ -43,12 +47,12 @@ const similarIcon = L.icon({
 
 // добавляю основной большой маркер в центр Токио
 const marker = L.marker(
-  CENTER_COORDINATES,
+  centerCoordinates,
   {
     draggable: true,
     icon: icon,
   },
-  address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`
+  address.value = `${centerCoordinates.lat} ${centerCoordinates.lng}`
 );
 
 marker.addTo(map);
@@ -61,19 +65,6 @@ marker.on('moveend', (evt) => {
 
   address.value = `${lat}, ${lng}`;
 });
-
-// Ставит карту на место при очистке
-
-const getInitialCoordinates = () => {
-  adForm.reset();
-  sliderElement.noUiSlider.set(1000);
-  marker.setLatLng(CENTER_COORDINATES);
-  map.setView(CENTER_COORDINATES, MAP_SCALE);
-  map.closePopup();
-  address.value = `${CENTER_COORDINATES.lat} ${CENTER_COORDINATES.lng}`;
-};
-
-buttonReset.addEventListener('click', getInitialCoordinates);
 
 // создаю маленькие маркеры с попапами объявлений
 
@@ -96,8 +87,33 @@ const createMarker = (offer) => {
 };
 
 // удаление маркеров
+
 const removeAllMarkers = () => {
   markerGroup.clearLayers();
 };
 
-export { getInitialCoordinates, createMarker, removeAllMarkers };
+// Ставит карту на место при очистке
+
+const onButtonResetClick = () => {
+  // очистка форм и валидации
+  adForm.reset();
+  filtersForm.reset();
+  pristine.reset();
+  sliderElement.noUiSlider.set(1000);
+  // ставит карту на место
+  address.value = `${centerCoordinates.lat} ${centerCoordinates.lng}`;
+  marker.setLatLng(centerCoordinates);
+  map.setView(centerCoordinates, MAP_SCALE);
+  map.closePopup();
+  // убирает превью фото
+  avatarImage.src = DEFAULT_AVATAR;
+  photoElement.src = DEFAULT_AVATAR;
+  // перерисовывает маркеры
+  removeAllMarkers();
+  getData(onError);
+};
+
+buttonReset.addEventListener('click', onButtonResetClick);
+
+
+export { createMarker, removeAllMarkers };
