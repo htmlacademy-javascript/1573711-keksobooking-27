@@ -4,23 +4,30 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFilter = document.querySelectorAll('.map__filter');
 const mapFeatures = document.querySelector('.map__features');
 
-const makeDisabled = () => {
+const disableForm = () => {
   adFormElements.classList.add('ad-form--disabled');
   adFormElement.forEach((element) => {
     element.setAttribute('disabled', true);
   });
+};
+
+const disableFilterForm = () => {
   mapFilters.classList.add('map__filters--disabled');
-  mapFilter.forEach ((element) => {
+  mapFilter.forEach((element) => {
     element.setAttribute('disabled', true);
   });
   mapFeatures.setAttribute('disabled', true);
 };
 
-const makeActive = () => {
+
+const enableForm = () => {
   adFormElements.classList.remove('ad-form--disabled');
   adFormElement.forEach((element) => {
     element.removeAttribute('disabled');
   });
+};
+
+const enableFilterForm = () => {
   mapFilters.classList.remove('map__filters--disabled');
   mapFilter.forEach ((element) => {
     element.removeAttribute('disabled', true);
@@ -28,6 +35,7 @@ const makeActive = () => {
   mapFeatures.removeAttribute('disabled');
 };
 
-makeDisabled();
+disableForm();
+disableFilterForm();
 
-export {makeActive};
+export {enableForm, enableFilterForm};

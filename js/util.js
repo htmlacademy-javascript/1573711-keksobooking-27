@@ -33,6 +33,12 @@ const onEscapyKeydown = (element) => (evt) => {
     evt.preventDefault();
     element.remove();
   }
+  document.removeEventListener('keydown', onEscapyKeydown);
+};
+
+const onModalClick = (element) => {
+  element.remove();
+  document.removeEventListener('click', onModalClick);
 };
 
 // нахожу шаблон успеха
@@ -43,9 +49,8 @@ const successElement = successContent.querySelector('.success');
 const formSendSuccess = () => {
   const newSuccessElement = successElement.cloneNode(true);
 
+  document.addEventListener('click', onModalClick(newSuccessElement));
   document.addEventListener('keydown', onEscapyKeydown(newSuccessElement));
-  document.addEventListener('click', () =>
-    newSuccessElement.remove());
 
   pageBody.appendChild(newSuccessElement);
 };
@@ -60,8 +65,10 @@ const formSendError = () => {
   const newErrorElement = errorElement.cloneNode(true);
 
   document.addEventListener('keydown', onEscapyKeydown(newErrorElement));
-  document.addEventListener('click', () =>
-    newErrorElement.remove());
+  document.addEventListener('click', onModalClick(newErrorElement));
+
+  // document.addEventListener('click', () =>
+  // newErrorElement.remove());
 };
 
 export { onError, formSendError, formSendSuccess };
