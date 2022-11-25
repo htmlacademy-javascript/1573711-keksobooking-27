@@ -35,10 +35,6 @@ const onEscapyKeydown = (element) => (evt) => {
   }
 };
 
-const onModalClick = (element) => {
-  element.remove();
-};
-
 // нахожу шаблон успеха
 const successContent = document.querySelector('#success').content;
 const successElement = successContent.querySelector('.success');
@@ -48,22 +44,24 @@ const formSendSuccess = () => {
   const newSuccessElement = successElement.cloneNode(true);
 
   document.addEventListener('keydown', onEscapyKeydown(newSuccessElement));
-  document.addEventListener('click', onModalClick(newSuccessElement));
+  document.addEventListener('click', () =>
+    newSuccessElement.remove());
+
   pageBody.appendChild(newSuccessElement);
 };
 
-const removeHandlers = (element) => {
-  document.removeEventListener('keydown', onEscapyKeydown(element));
-  document.removeEventListener('click', onModalClick(element));
-};
+// const removeHandlers = (element) => {
+//   document.removeEventListener('keydown', onEscapyKeydown(element));
+//   document.removeEventListener('click', () => element.remove());
+// };
 
 // Неуспешная отправка формы
 const formSendError = () => {
   const newErrorElement = errorElement.cloneNode(true);
 
   document.addEventListener('keydown', onEscapyKeydown(newErrorElement));
-  document.addEventListener('click', onModalClick(newErrorElement));
-  pageBody.appendChild(newErrorElement);
+  document.addEventListener('click', () =>
+    newErrorElement.remove());
 };
 
-export { onError, formSendError, formSendSuccess, removeHandlers };
+export { onError, formSendError, formSendSuccess };
