@@ -1,4 +1,4 @@
-import { enableForm, enableFilterForm } from './form.js';
+import { setFormState } from './form.js';
 import { createCard } from './ads_generator.js';
 import { avatarImage, photoElement, DEFAULT_AVATAR } from './photos.js';
 import { getData } from './server.js';
@@ -19,8 +19,7 @@ address.setAttribute('readonly', true);
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    enableForm();
-    enableFilterForm();
+    setFormState(true);
   })
   .setView(centerCoordinates, MAP_SCALE);
 
