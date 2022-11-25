@@ -1,5 +1,6 @@
-import { sendData } from './server.js';
-import { formSendError, formSendSuccess } from './util.js';
+import { sendData, getData } from './server.js';
+import { formSendError, formSendSuccess, onError } from './util.js';
+import { avatarImage, photoElement, DEFAULT_AVATAR } from './photos.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormTitle = adForm.querySelector('#title');
@@ -156,9 +157,17 @@ pristine.addValidator(
 // reser button
 
 const resetButton = adForm.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', () => {
+
+const onResetButtonClick = () => {
   filtersForm.reset();
-});
+  adForm.reset();
+  pristine.reset();
+  avatarImage.src = DEFAULT_AVATAR;
+  photoElement.src = DEFAULT_AVATAR;
+  getData(onError);
+};
+
+resetButton.addEventListener('click', onResetButtonClick);
 
 // Block submit button
 
@@ -173,7 +182,7 @@ const unblockSubmitButton = () => {
   buttonSubmit.textContent = 'Опубликовать';
 };
 
-const setUserFormSubmit = (onSuccess, onError) => {
+const setUserFormSubmit = (onSuccess, onFail) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -187,7 +196,7 @@ const setUserFormSubmit = (onSuccess, onError) => {
           unblockSubmitButton();
         },
         () => {
-          onError();
+          onFail();
           unblockSubmitButton();
         },
         formData);
