@@ -4,6 +4,7 @@ import { onError } from './util.js';
 
 const GET_URL = 'https://27.javascript.pages.academy/keksobooking/data';
 const SEND_URL = 'https://27.javascript.pages.academy/keksobooking';
+const FAIL_DESCRIPTION = 'Произошла ошибка при загрузке. Попробуйте снова.';
 
 const getData = (onFail) => fetch(GET_URL)
   .then((response) => {
@@ -17,7 +18,7 @@ const getData = (onFail) => fetch(GET_URL)
     sortAddsArray(adds);
   })
   .catch(() => {
-    onFail('Произошла ошибка при загрузке. Попробуйте снова.');
+    onFail(FAIL_DESCRIPTION);
   });
 
 getData(onError);

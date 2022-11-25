@@ -1,6 +1,11 @@
 import { sendData } from './server.js';
 import { formSendError, formSendSuccess } from './util.js';
 
+const ROOMS_ERROR = 'Выберите жилье попросторнее';
+const TITLE_ERROR = 'Введите от 30 до 100 символов';
+const PRICE_ERROR = 'Цена не должна превышать 100000!';
+const CAPACITY_ERROR = 'Вы вряд ли сюда влезете';
+
 const adForm = document.querySelector('.ad-form');
 const adFormTitle = adForm.querySelector('#title');
 const adFormPrice = adForm.querySelector('#price');
@@ -46,7 +51,7 @@ function validateTitle(value) {
 pristine.addValidator(
   adFormTitle,
   validateTitle,
-  'Введите от 30 до 100 символов');
+  TITLE_ERROR);
 
 function validatePrice() {
   return adFormPrice.value <= MAX_PRICE;
@@ -55,7 +60,7 @@ function validatePrice() {
 pristine.addValidator(
   adFormPrice,
   validatePrice,
-  'Цена не должна превышать 100000!');
+  PRICE_ERROR);
 
 // Validate room and capacity
 
@@ -66,12 +71,12 @@ function validateCapacity() {
 pristine.addValidator(
   adFormRooms,
   validateCapacity,
-  'Выберите жилье попросторнее');
+  ROOMS_ERROR);
 
 pristine.addValidator(
   adFormCapacity,
   validateCapacity,
-  'Вы вряд ли сюда влезете');
+  CAPACITY_ERROR);
 
 // Validate Type and Price
 
@@ -154,7 +159,6 @@ pristine.addValidator(
 );
 
 // Block submit button
-
 const blockSubmitButton = () => {
   buttonSubmit.setAttribute('disabled', true);
   buttonSubmit.textContent = 'Публикуется...';
