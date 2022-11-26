@@ -1,5 +1,11 @@
 import { sendData } from './server.js';
 import { formSendError, formSendSuccess } from './util.js';
+import { onButtonResetClick } from './map.js';
+
+const ROOMS_ERROR = 'Выберите жилье попросторнее';
+const TITLE_ERROR = 'Введите от 30 до 100 символов';
+const PRICE_ERROR = 'Цена не должна превышать 100000!';
+const CAPACITY_ERROR = 'Вы вряд ли сюда влезете';
 
 const adForm = document.querySelector('.ad-form');
 const adFormTitle = adForm.querySelector('#title');
@@ -46,7 +52,7 @@ function validateTitle(value) {
 pristine.addValidator(
   adFormTitle,
   validateTitle,
-  'Введите от 30 до 100 символов');
+  TITLE_ERROR);
 
 function validatePrice() {
   return adFormPrice.value <= MAX_PRICE;
@@ -55,7 +61,7 @@ function validatePrice() {
 pristine.addValidator(
   adFormPrice,
   validatePrice,
-  'Цена не должна превышать 100000!');
+  PRICE_ERROR);
 
 // Validate room and capacity
 
@@ -66,12 +72,12 @@ function validateCapacity() {
 pristine.addValidator(
   adFormRooms,
   validateCapacity,
-  'Выберите жилье попросторнее');
+  ROOMS_ERROR);
 
 pristine.addValidator(
   adFormCapacity,
   validateCapacity,
-  'Вы вряд ли сюда влезете');
+  CAPACITY_ERROR);
 
 // Validate Type and Price
 
@@ -153,15 +159,7 @@ pristine.addValidator(
   validateTimeOut
 );
 
-// reser button
-
-const resetButton = adForm.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', () => {
-  filtersForm.reset();
-});
-
 // Block submit button
-
 const blockSubmitButton = () => {
   buttonSubmit.setAttribute('disabled', true);
   buttonSubmit.textContent = 'Публикуется...';
@@ -173,7 +171,7 @@ const unblockSubmitButton = () => {
   buttonSubmit.textContent = 'Опубликовать';
 };
 
-const setUserFormSubmit = (onSuccess, onError) => {
+const setUserFormSubmit = (onSuccess, onFail) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -184,10 +182,11 @@ const setUserFormSubmit = (onSuccess, onError) => {
       sendData(
         () => {
           onSuccess();
+          onButtonResetClick();
           unblockSubmitButton();
         },
         () => {
-          onError();
+          onFail();
           unblockSubmitButton();
         },
         formData);
@@ -197,4 +196,4 @@ const setUserFormSubmit = (onSuccess, onError) => {
 
 setUserFormSubmit(formSendSuccess, formSendError);
 
-export { adForm, sliderElement };
+export { adForm, sliderElement, pristine, filtersForm };

@@ -1,4 +1,6 @@
 const pageBody = document.querySelector('body');
+const successContent = document.querySelector('#success').content;
+const successElement = successContent.querySelector('.success');
 const errorContent = document.querySelector('#error').content;
 const errorElement = errorContent.querySelector('.error');
 
@@ -24,49 +26,34 @@ const onError = (message) => {
   }, 5000);
 };
 
-// Успешная отправка формы
+// Успешная/неуспешная отправка формы
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-// нахожу шаблон успеха
-const successContent = document.querySelector('#success').content;
-const successElement = successContent.querySelector('.success');
+const showMessage = (element) => {
+  pageBody.appendChild(element);
 
-// нахожу шаблон ошибки
+  const onModalClose = (evt) => {
+    if(evt.type === 'click' || isEscapeKey(evt)) {
+      evt.preventDefault();
+      element.remove();
+      document.removeEventListener('click', onModalClose);
+      document.removeEventListener('keydown', onModalClose);
+    }
+  };
+
+  document.addEventListener('keydown', onModalClose);
+  document.addEventListener('click', onModalClose);
+};
 
 const formSendSuccess = () => {
   const newSuccessElement = successElement.cloneNode(true);
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      newSuccessElement.remove();
-    }
-  });
-  document.addEventListener('click', () => {
-    newSuccessElement.remove();
-  });
-
-  pageBody.appendChild(newSuccessElement);
+  showMessage(newSuccessElement);
 };
-
-// Неуспешная отправка формы
 
 const formSendError = () => {
   const newErrorElement = errorElement.cloneNode(true);
-
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      newErrorElement.remove();
-    }
-  });
-
-  document.addEventListener('click', () => {
-    newErrorElement.remove();
-  });
-
-  pageBody.appendChild(newErrorElement);
+  showMessage(newErrorElement);
 };
 
 export { onError, formSendError, formSendSuccess };
