@@ -1,5 +1,6 @@
 import { sendData } from './server.js';
 import { formSendError, formSendSuccess } from './util.js';
+import { onButtonResetClick } from './map.js';
 
 const ROOMS_ERROR = 'Выберите жилье попросторнее';
 const TITLE_ERROR = 'Введите от 30 до 100 символов';
@@ -181,6 +182,7 @@ const setUserFormSubmit = (onSuccess, onFail) => {
       sendData(
         () => {
           onSuccess();
+          onButtonResetClick();
           unblockSubmitButton();
         },
         () => {

@@ -116,4 +116,4 @@ const onButtonResetClick = () => {
 buttonReset.addEventListener('click', onButtonResetClick);
 
 
-export { createMarker, removeAllMarkers };
+export { createMarker, removeAllMarkers, onButtonResetClick };
