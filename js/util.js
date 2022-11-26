@@ -33,22 +33,17 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 const showMessage = (element) => {
   pageBody.appendChild(element);
 
-  const onModalClick = (evt) => {
-    if (evt) {
-      element.remove();
-      document.removeEventListener('click', onModalClick);
-    }
-  };
-  const onEscapyKeydown = (evt) => {
-    if (isEscapeKey(evt)) {
+  const onModalClose = (evt) => {
+    if(evt.type === 'click' || isEscapeKey(evt)) {
       evt.preventDefault();
       element.remove();
-      document.removeEventListener('keydown', onEscapyKeydown);
+      document.removeEventListener('click', onModalClose);
+      document.removeEventListener('keydown', onModalClose);
     }
   };
 
-  document.addEventListener('keydown', onEscapyKeydown);
-  document.addEventListener('click', onModalClick);
+  document.addEventListener('keydown', onModalClose);
+  document.addEventListener('click', onModalClose);
 };
 
 const formSendSuccess = () => {
