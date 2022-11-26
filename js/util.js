@@ -1,4 +1,6 @@
 const pageBody = document.querySelector('body');
+const successContent = document.querySelector('#success').content;
+const successElement = successContent.querySelector('.success');
 const errorContent = document.querySelector('#error').content;
 const errorElement = errorContent.querySelector('.error');
 
@@ -24,52 +26,39 @@ const onError = (message) => {
   }, 5000);
 };
 
-// Успешная отправка формы
+// Успешная/неуспешная отправка формы
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const onEscapyKeydown = (element) => (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    element.remove();
-  }
-  document.removeEventListener('keydown', onEscapyKeydown(element));
+const showMessage = (element) => {
+  pageBody.appendChild(element);
+
+  const onModalClick = (evt) => {
+    if (evt) {
+      element.remove();
+      document.removeEventListener('click', onModalClick);
+    }
+  };
+  const onEscapyKeydown = (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      element.remove();
+      document.removeEventListener('keydown', onEscapyKeydown);
+    }
+  };
+
+  document.addEventListener('keydown', onEscapyKeydown);
+  document.addEventListener('click', onModalClick);
 };
 
-const onModalClick = (element) => {
-  element.remove();
-  document.removeEventListener('click', onModalClick(element));
-};
-
-// нахожу шаблон успеха
-const successContent = document.querySelector('#success').content;
-const successElement = successContent.querySelector('.success');
-
-// нахожу шаблон ошибки
 const formSendSuccess = () => {
   const newSuccessElement = successElement.cloneNode(true);
-
-  document.addEventListener('click', () => {
-    onModalClick(newSuccessElement);
-  });
-  document.addEventListener('keydown', onEscapyKeydown(newSuccessElement));
-
-  pageBody.appendChild(newSuccessElement);
+  showMessage(newSuccessElement);
 };
 
-// const removeHandlers = (element) => {
-//   document.removeEventListener('keydown', onEscapyKeydown(element));
-//   document.removeEventListener('click', () => element.remove());
-// };
-
-// Неуспешная отправка формы
 const formSendError = () => {
   const newErrorElement = errorElement.cloneNode(true);
-
-  document.addEventListener('keydown', onEscapyKeydown(newErrorElement));
-  document.addEventListener('click', () => {
-    onModalClick(formSendError);
-  });
+  showMessage(newErrorElement);
 };
 
 export { onError, formSendError, formSendSuccess };
